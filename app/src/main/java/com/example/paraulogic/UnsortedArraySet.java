@@ -33,18 +33,6 @@ public class UnsortedArraySet<E> {
         }
     }
 
-    /*    public boolean remove(E elem) {
-            if (contains(elem)) {
-                for (int i = 0; i < n; i++) {
-                    if (((E) this.array[i]).equals(elem)) {
-                        this.array[i] = this.array[--this.n];
-                    }
-                }
-                return true;
-            } else {
-                return false;
-            }
-        }*/
     public boolean remove(E elem) {
         for (int i = 0; i < n; i++) {
             if (((E) this.array[i]).equals(elem)) {
