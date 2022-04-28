@@ -6,18 +6,6 @@ package com.example.paraulogic;
 
 public class BSTMapping<K extends Comparable, V> {
 
-    //Declaram la clase Node que servira per crear l'abre de cerca binari
-    private class Node<K extends Comparable, V> {
-        private V value;
-        private K key;
-        private Node left, right;
-
-        public Node(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
-    }
-
     private K key;
     private V value;
     private Node left, right;
@@ -55,5 +43,42 @@ public class BSTMapping<K extends Comparable, V> {
 
     public V remove(K key) {
         return null;
+    }
+
+    private Node removeRecursive(Node current, K key) {
+        if (current == null) {
+            return null;
+        }
+
+        //Cas en que la key sigui igual a l'actual
+        if (key.equals(current.key)) {
+            // Node to delete found
+            // ... code to delete the node will go here
+        }
+        //Cas en el que el valor es menor al actual
+        if (key.compareTo(current.key) < 0) {
+            current.left = removeRecursive(current.left, key);
+            return current;
+        }
+        //Per defecte sera que el valor es mes gran que l'actual
+        current.right = removeRecursive(current.right, key);
+        return current;
+    }
+
+    //Declaram la clase Node que servira per crear l'abre de cerca binari
+    private class Node<K extends Comparable, V> {
+        private V value;
+        private K key;
+        private Node left, right;
+
+        public Node(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        protected class Pair{
+            private K key;
+            private V value;
+        }
     }
 }
