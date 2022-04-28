@@ -38,8 +38,25 @@ public class BSTMapping<K extends Comparable, V> {
 
 
     public V get(K key) {
-        return null;
+        return (V)getRecursive(new Node(this.key, this.value), key);
     }
+
+    private V getRecursive(Node current, K key){
+        // Cas en el que ja hem trobat el que cercam
+        if(current.key.equals(key)){
+            return (V)current.value;
+        }// Cas en el que el que cercam és menor que l'estat actual
+        else if(current.key.compareTo(key)<0){
+            return (V)getRecursive(current.left,key);
+        }// Si no l'hem trobat i tampoc és menor, s'asumeix que és menor
+        else{
+            return (V)getRecursive(current.left,key);
+        }
+
+    }
+
+
+
 
     public V remove(K key) {
         return null;
