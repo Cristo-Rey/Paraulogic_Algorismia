@@ -4,20 +4,26 @@ package com.example.paraulogic;
  * @author Joan López Ferrer & Xavier Vives Marcus
  */
 
-public class BSTMapping<V, K> {
+public class BSTMapping<K, V extends Comparable> {
 
-//Declaram la clase Node que servira per crear l'abre de cerca binari
-    private class Node<K, V> {
+    //Declaram la clase Node que servira per crear l'abre de cerca binari
+    private class Node<K, V extends Comparable> {
         private V value;
         private K key;
-        private Node l,r;
+        private Node left, right;
+
+        public Node(K key,V value){
+            this.key=key;
+            this.value=value;
+        }
     }
+
     private K key;
     private V value;
-    private Node l, r;
+    private Node left, right;
 
     public V put(K key, V value) {
-        return null;
+        return (V)addRecursive(new Node(this.key,this.value) , key, value);
     }
 
     private Node addRecursive(Node current, K key, V value) {
