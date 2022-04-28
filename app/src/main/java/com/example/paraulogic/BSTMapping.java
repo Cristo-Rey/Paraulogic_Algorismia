@@ -1,6 +1,17 @@
 package com.example.paraulogic;
 
+/*
+ * @author Joan López Ferrer & Xavier Vives Marcus
+ */
+
 public class BSTMapping<V, K> {
+
+//Declaram la clase Node que servira per crear l'abre de cerca binari
+    private class Node<K, V> {
+        private V value;
+        private K key;
+        private Node l,r;
+    }
     private K key;
     private V value;
     private Node l, r;
@@ -39,6 +50,4 @@ public class BSTMapping<V, K> {
     public V remove(K key) {
         return null;
     }
-
-
 }
