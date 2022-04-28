@@ -36,7 +36,6 @@ public class BSTMapping<K extends Comparable, V> {
         return current;
     }
 
-
     public V get(K key) {
         return (V)getRecursive(new Node(this.key, this.value), key);
     }
@@ -55,11 +54,8 @@ public class BSTMapping<K extends Comparable, V> {
 
     }
 
-
-
-
     public V remove(K key) {
-        return null;
+        return (V) removeRecursive(new Node(this.key, this.value), key).value;
     }
 
     private Node removeRecursive(Node current, K key) {
@@ -69,8 +65,16 @@ public class BSTMapping<K extends Comparable, V> {
 
         //Cas en que la key sigui igual a l'actual
         if (key.equals(current.key)) {
-            // Node to delete found
-            // ... code to delete the node will go here
+            //En cas de que no el trobi, retorna null
+            if (current.left == null && current.right == null) {
+                return null;
+            //Retorna el de la esquerra
+            } else if (current.right == null) {
+                return current.left;
+                //Retorna el de la dreta
+            } else if (current.left == null) {
+                return current.right;
+            }
         }
         //Cas en el que el valor es menor al actual
         if (key.compareTo(current.key) < 0) {
@@ -93,7 +97,7 @@ public class BSTMapping<K extends Comparable, V> {
             this.value = value;
         }
 
-        protected class Pair{
+        protected class Pair {
             private K key;
             private V value;
         }
