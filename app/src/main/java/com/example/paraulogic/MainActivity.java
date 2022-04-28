@@ -10,6 +10,10 @@ import android.widget.TextView;
 import java.util.Iterator;
 import java.util.Random;
 
+/*
+ * @author Joan López Ferrer & Xavier Vives Marcus
+ */
+
 public class MainActivity extends AppCompatActivity {
     UnsortedArraySet lletres;
     int[] idButton = new int[7];

@@ -3,7 +3,7 @@ package com.example.paraulogic;
 import java.util.Iterator;
 
 /*
- * @author Joan López Ferrer
+ * @author Joan López Ferrer & Xavier Vives Marcus
  */
 public class UnsortedArraySet<E> {
 
