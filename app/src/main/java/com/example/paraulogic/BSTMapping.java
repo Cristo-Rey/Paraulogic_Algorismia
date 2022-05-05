@@ -10,6 +10,13 @@ public class BSTMapping<K extends Comparable, V> {
     private V value;
     private Node left, right;
 
+    public BSTMapping (){
+        this.key = null;
+        this.value = null;
+        this.left = null;
+        this.right = null;
+    }
+
     public V put(K key, V value) {
         return (V) putRecursive(new Node(this.key, this.value), key, value);
     }
