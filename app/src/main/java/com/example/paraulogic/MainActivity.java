@@ -15,8 +15,12 @@ import java.util.Random;
  */
 
 public class MainActivity extends AppCompatActivity {
+    // Conjunt que representa les lletres amb les que es pot jugar
     UnsortedArraySet lletres;
+    // El botó central ocupa la darrera posició
     int[] idButton = new int[7];
+    // Mapping de les paraules que hem introduit
+    BSTMapping paraules;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         lletres = new UnsortedArraySet(7);
         generarArray();
         assignarLletres();
+        paraules = new BSTMapping();
 
     }
 
@@ -39,6 +44,32 @@ public class MainActivity extends AppCompatActivity {
         String s = new StringBuilder().append(text.getText()).append(btn.getText()).toString();
         text.setText(s);
     }
+
+    public void introdueixParaula(View view) {
+        // Agafam el botó central
+        Button btn = (Button) findViewById(idButton[idButton.length - 1]);
+        // Agafam la paraula escrita
+        TextView paraula = (TextView) findViewById(R.id.escritura);
+
+        // Comprovam si compté la lletra del botó central
+        // Cas en el que sí que la té
+        if (paraula.getText().toString().contains(btn.getText().toString())) {
+            Integer valor = (int) paraules.get(paraula.getText().toString());
+            if (valor == null) {
+                paraules.put(paraula.getText().toString(), 1);
+            }else{
+                // Eliminam la paraula
+                paraules.remove(paraula.getText().toString());
+                // La tornam a ficar amb el valor sumat a 1 per indicar que l'hem posat més d'una vegada
+                paraules.put(paraula.getText().toString(),(Integer)(valor+1));
+            }
+        }
+        // Cas en el que no la té
+        else {
+            System.out.println("[introdueixParaule() -> No compté la lletra central]");
+        }
+    }
+
 
     public void suprimeix(View view) {
         TextView text = (TextView) findViewById(R.id.escritura);
