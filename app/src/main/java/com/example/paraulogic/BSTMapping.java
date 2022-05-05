@@ -58,32 +58,40 @@ public class BSTMapping<K extends Comparable, V> {
         return (V) removeRecursive(new Node(this.key, this.value), key).value;
     }
 
-    private Node removeRecursive(Node current, K key) {
-        if (current == null) {
-            return null;
+    private K minValue(Node root){
+        //Inicialitzam minval
+        K minval = (K) root.key;
+        //find minval
+        while (root.left != null)  {
+            minval = (K) root.left.key;
+            root = root.left;
         }
+        return minval;
+    }
 
-        //Cas en que la key sigui igual a l'actual
-        if (key.equals(current.key)) {
-            //En cas de que no el trobi, retorna null
-            if (current.left == null && current.right == null) {
-                return null;
-            //Retorna el de la esquerra
-            } else if (current.right == null) {
-                return current.left;
-                //Retorna el de la dreta
-            } else if (current.left == null) {
-                return current.right;
-            }
+    private Node removeRecursive(Node root, K key){
+        //L'arbre es buit
+        if (root == null)  return root;
+
+        //Cercam per la part esquerra
+        if (key.compareTo(root.key) < 0){
+            root.left = removeRecursive(root.left, key);
         }
-        //Cas en el que el valor es menor al actual
-        if (key.compareTo(current.key) < 0) {
-            current.left = removeRecursive(current.left, key);
-            return current;
+        //Cercam per la part dreta
+        else if (key.compareTo(root.key) > 0){
+            root.right = removeRecursive(root.right, key);
         }
-        //Per defecte sera que el valor es mes gran que l'actual
-        current.right = removeRecursive(current.right, key);
-        return current;
+        else{
+            //El Node nomes te un fill
+            if (root.left == null) return root.right;
+            else if (root.right == null) return root.left;
+
+            //El node te dos fills, per tant cercam el més petit
+            root.key = minValue(root.right);
+
+            root.right = removeRecursive(root.right, (K) root.key);
+        }
+        return root;
     }
 
     //Declaram la clase Node que servira per crear l'abre de cerca binari
