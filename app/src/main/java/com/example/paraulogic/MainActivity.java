@@ -59,16 +59,18 @@ public class MainActivity extends AppCompatActivity {
 
         // Comprovam si compté la lletra del botó central
         // Cas en el que sí te la lletra central
+        if(paraula.getText().toString().length()>=3){
         if (paraula.getText().toString().contains(btn.getText().toString())) {
             // Comprovam si la lletra és del diccionari
             // Cas en el que és al diccionari
             if (diccionari.contains(paraula.getText().toString().toLowerCase())) {
-                Integer valor = (int) paraules.get(paraula.getText().toString());
+                Integer valor = paraules.get(paraula.getText().toString());
                 if (valor == null) {
                     paraules.put(paraula.getText().toString(), 1);
                 } else {
                     // augmentam en 1 la quantitat de vegades que l'hem introduit
                     valor = valor + 1;
+                    paraules.put(paraula.getText().toString(),valor);
                 }
             }
             // Cas en el que la paraula no és del diccionari
@@ -90,6 +92,17 @@ public class MainActivity extends AppCompatActivity {
             // Ho mostram per la GUI
             Context context =getApplicationContext();
             CharSequence text ="No compté la lletra central";
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast . makeText ( context , text , duration );
+            toast.show();
+        }}
+        // Cas en el que la paraula no té 3 o més lletres
+        else{
+            System.out.println("[introdueixParaula() -> No compté 3 o més lletres]");
+
+            // Ho mostram per la GUI
+            Context context =getApplicationContext();
+            CharSequence text ="No compté 3 o més lletres";
             int duration = Toast.LENGTH_LONG;
             Toast toast = Toast . makeText ( context , text , duration );
             toast.show();
@@ -178,17 +191,17 @@ public class MainActivity extends AppCompatActivity {
             while (liniaActual != null) {
                 //Afegim la paraula llegida a l'arbre
                 diccionari.add(liniaActual);
-
+                System.out.println(liniaActual.toString());
                 liniaActual = r.readLine();
             }
         //Control d'errors
         } catch (IOException e) {
             System.out.println("ERROR (llegirDiccionari): " + e.toString());
         }
-        System.out.println("Diccionari:\n" + diccionari);
     }
     //BORRAR VERSIO FINAL
     public void banana(View view){
+        lletres = new UnsortedArraySet<>(7);
         generarArray();
         assignarLletres();
     }
