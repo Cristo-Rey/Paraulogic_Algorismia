@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Random;
 import java.util.TreeSet;
 
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         if (paraula.getText().toString().contains(btn.getText().toString())) {
             // Comprovam si la lletra és del diccionari
             // Cas en el que és al diccionari
-            if (diccionari.contains(paraula.getText().toString())) {
+            if (diccionari.contains(paraula.getText().toString().toLowerCase())) {
                 Integer valor = (int) paraules.get(paraula.getText().toString());
                 if (valor == null) {
                     paraules.put(paraula.getText().toString(), 1);
@@ -185,6 +186,11 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("ERROR (llegirDiccionari): " + e.toString());
         }
         System.out.println("Diccionari:\n" + diccionari);
+    }
+    //BORRAR VERSIO FINAL
+    public void banana(View view){
+        generarArray();
+        assignarLletres();
     }
 }
 
