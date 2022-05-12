@@ -8,6 +8,7 @@ public class BSTMapping<K extends Comparable, V> {
 
     private K key;
     private V value;
+    private Node root;
     private Node left, right;
 
     public BSTMapping (){
@@ -15,10 +16,13 @@ public class BSTMapping<K extends Comparable, V> {
         this.value = null;
         this.left = null;
         this.right = null;
+        this.root=null;
     }
 
     public V put(K key, V value) {
-        return (V) putRecursive(new Node(this.key, this.value), key, value);
+        root=putRecursive(root, key, value);
+        return null;
+        //return (V) putRecursive(root, key, value);
     }
 
     private Node putRecursive(Node current, K key, V value) {
@@ -36,6 +40,7 @@ public class BSTMapping<K extends Comparable, V> {
             // El ficam a la dreta
             current.right = putRecursive(current.right, key, value);
         } else {
+            current.value=value;
             // Valor ja està dins l'arbre
             return current;
         }
@@ -44,25 +49,30 @@ public class BSTMapping<K extends Comparable, V> {
     }
 
     public V get(K key) {
-        return (V)getRecursive(new Node(this.key, this.value), key);
+        return (V)getRecursive(root, key);
     }
 
     private V getRecursive(Node current, K key){
+        if(current==null){
+            return null;
+        }
         // Cas en el que ja hem trobat el que cercam
         if(current.key.equals(key)){
             return (V)current.value;
-        }// Cas en el que el que cercam és menor que l'estat actual
+        }
+        // Cas en el que el que cercam és menor que l'estat actual
         else if(current.key.compareTo(key)<0){
             return (V)getRecursive(current.left,key);
         }// Si no l'hem trobat i tampoc és menor, s'asumeix que és menor
         else{
-            return (V)getRecursive(current.left,key);
+            return (V)getRecursive(current.right,key);
         }
+
 
     }
 
     public V remove(K key) {
-        return (V) removeRecursive(new Node(this.key, this.value), key).value;
+        return (V) removeRecursive(root, key).value;
     }
 
     private K minValue(Node root){
