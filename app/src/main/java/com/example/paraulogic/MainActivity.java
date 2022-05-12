@@ -2,13 +2,16 @@ package com.example.paraulogic;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Iterator;
 import java.util.Random;
+import java.util.TreeSet;
 
 /*
  * @author Joan López Ferrer & Xavier Vives Marcus
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     int[] idButton = new int[7];
     // Mapping de les paraules que hem introduit
     BSTMapping paraules;
+    TreeSet<String> diccionari;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,21 +56,39 @@ public class MainActivity extends AppCompatActivity {
         TextView paraula = (TextView) findViewById(R.id.escritura);
 
         // Comprovam si compté la lletra del botó central
-        // Cas en el que sí que la té
+        // Cas en el que la paraula és correcte
         if (paraula.getText().toString().contains(btn.getText().toString())) {
-            Integer valor = (int) paraules.get(paraula.getText().toString());
-            if (valor == null) {
-                paraules.put(paraula.getText().toString(), 1);
-            }else{
-                // Eliminam la paraula
-                paraules.remove(paraula.getText().toString());
-                // La tornam a ficar amb el valor sumat a 1 per indicar que l'hem posat més d'una vegada
-                paraules.put(paraula.getText().toString(),(Integer)(valor+1));
+            if (diccionari.contains(paraula.getText().toString())) {
+                Integer valor = (int) paraules.get(paraula.getText().toString());
+                if (valor == null) {
+                    paraules.put(paraula.getText().toString(), 1);
+                } else {
+                    // augmentam en 1 la quantitat de vegades que l'hem introduit
+                    valor = valor + 1;
+                }
+            }
+            // Cas en el que la paraula no és del diccionari
+            else{
+                System.out.println("[introdueixParaula() -> No és una paraula vàlida]");
+
+                // Ho mostram per la GUI
+                Context context =getApplicationContext();
+                CharSequence text ="No és una paraula vàlida";
+                int duration = Toast.LENGTH_LONG;
+                Toast toast = Toast . makeText ( context , text , duration );
+                toast.show();
             }
         }
-        // Cas en el que no la té
+        // Cas en el que no compté la lletra central
         else {
-            System.out.println("[introdueixParaule() -> No compté la lletra central]");
+            System.out.println("[introdueixParaula() -> No compté la lletra central]");
+
+            // Ho mostram per la GUI
+            Context context =getApplicationContext();
+            CharSequence text ="No compté la lletra central";
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast . makeText ( context , text , duration );
+            toast.show();
         }
     }
 
