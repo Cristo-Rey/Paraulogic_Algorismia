@@ -1,14 +1,15 @@
 package com.example.paraulogic;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.TreeSet;
@@ -19,11 +20,11 @@ import java.util.TreeSet;
 
 public class MainActivity extends AppCompatActivity {
     // Conjunt que representa les lletres amb les que es pot jugar
-    UnsortedArraySet lletres;
+    UnsortedArraySet<Character> lletres;
     // El botó central ocupa la darrera posició
     int[] idButton = new int[7];
     // Mapping de les paraules que hem introduit
-    BSTMapping paraules;
+    BSTMapping<String,Integer> paraules;
     TreeSet<String> diccionari;
 
     @Override
@@ -31,11 +32,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lletres = new UnsortedArraySet(7);
+        lletres = new UnsortedArraySet<>(7);
         generarArray();
         assignarLletres();
-        paraules = new BSTMapping();
-
+        paraules = new BSTMapping<>();
+        llegirDiccionari();
     }
 
     //Gestor de events botons principals
@@ -56,8 +57,10 @@ public class MainActivity extends AppCompatActivity {
         TextView paraula = (TextView) findViewById(R.id.escritura);
 
         // Comprovam si compté la lletra del botó central
-        // Cas en el que la paraula és correcte
+        // Cas en el que sí te la lletra central
         if (paraula.getText().toString().contains(btn.getText().toString())) {
+            // Comprovam si la lletra és del diccionari
+            // Cas en el que és al diccionari
             if (diccionari.contains(paraula.getText().toString())) {
                 Integer valor = (int) paraules.get(paraula.getText().toString());
                 if (valor == null) {
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void shuffle(View view) {
-        Character auxlletres[] = new Character[7];
+        Character[] auxlletres = new Character[7];
         Iterator it = lletres.iterator();
         Random r = new Random();
         int m = 0;
@@ -156,6 +159,32 @@ public class MainActivity extends AppCompatActivity {
             lletra = (Character) iterador.next();
             btn.setText(lletra.toString());
         }
+    }
+
+    //Funció que llegueix el arxiu catala_filtrat i fica el seu contingut a un Arbre Vermell i Negre.
+    public void llegirDiccionari() {
+        //Declaram els objectes necessaris per llegir del arxiu
+        InputStream is = getResources().openRawResource(R.raw.catala_filtrat);
+        BufferedReader r = new BufferedReader(new InputStreamReader(is));
+        String liniaActual;
+
+        //Cream l'arbre vermell i negre.
+        diccionari = new TreeSet<>();
+
+        try {
+            //Bucle que llegueix tot l'arxiu fins al final
+            liniaActual = r.readLine();
+            while (liniaActual != null) {
+                //Afegim la paraula llegida a l'arbre
+                diccionari.add(liniaActual);
+
+                liniaActual = r.readLine();
+            }
+        //Control d'errors
+        } catch (IOException e) {
+            System.out.println("ERROR (llegirDiccionari): " + e.toString());
+        }
+        System.out.println("Diccionari:\n" + diccionari);
     }
 }
 
