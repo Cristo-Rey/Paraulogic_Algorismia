@@ -1,14 +1,16 @@
 package com.example.paraulogic;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AppCompatActivity;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +25,7 @@ import java.util.TreeSet;
  */
 
 public class MainActivity extends AppCompatActivity {
+    public static final String EXTRA_MESSAGE = "com.example.paraulogic.MESSAGE";
     // Conjunt que representa les lletres amb les que es pot jugar
     UnsortedArraySet<Character> lletres;
     // El botó central ocupa la darrera posició
@@ -36,18 +39,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lletres = new UnsortedArraySet<>(7);
-        generarArray();
-        assignarLletres();
         paraules = new BSTMapping<>();
         llegirDiccionari();
+
+        while(!comprovarConjunt());
     }
 
     //Gestor de events botons principals
     public void setLletra(View view) {
         //Cream els objectes del botó pitjat i de la casella d'escriure
-        Button btn = (Button) findViewById(view.getId());
-        TextView text = (TextView) findViewById(R.id.escritura);
+        Button btn = findViewById(view.getId());
+        TextView text = findViewById(R.id.escritura);
 
         //Cream un nou string amb el contingut actual i el contingut del ja escrit
         String s = new StringBuilder().append(text.getText()).append(btn.getText()).toString();
@@ -56,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void introdueixParaula(View view) {
         // Agafam el botó central
-        Button btn = (Button) findViewById(idButton[idButton.length - 1]);
+        Button btn = findViewById(idButton[idButton.length - 1]);
         // Agafam la paraula escrita
-        TextView paraula = (TextView) findViewById(R.id.escritura);
+        TextView paraula = findViewById(R.id.escritura);
 
         // Comprovam si compté la lletra del botó central
         // Cas en el que sí te la lletra central
@@ -125,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void suprimeix(View view) {
-        TextView text = (TextView) findViewById(R.id.escritura);
+        TextView text = findViewById(R.id.escritura);
 
         //Cream un nou string amb el contingut actual i el contingut del ja escrit
         String s = text.getText().toString();
@@ -151,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         for (int i = 0; i < idButton.length; i++) {
-            Button btn = (Button) findViewById(idButton[i]);
+            Button btn = findViewById(idButton[i]);
             btn.setText(auxlletres[i].toString());
         }
     }
@@ -163,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         char lletra;
         for (int i = 0; i < 7; ) {
             lletra = (char) (ran.nextInt(26) + 'A');
-            if (lletres.add((Character) lletra)) i++;
+            if (lletres.add(lletra)) i++;
         }
     }
 
@@ -183,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
         idButton[6] = R.id.button0;
 
         for (int i = 0; i < 7; i++) {
-            btn = (Button) findViewById(idButton[i]);
+            btn = findViewById(idButton[i]);
             lletra = (Character) iterador.next();
             btn.setText(lletra.toString());
         }
@@ -205,20 +207,56 @@ public class MainActivity extends AppCompatActivity {
             while (liniaActual != null) {
                 //Afegim la paraula llegida a l'arbre
                 diccionari.add(liniaActual);
-                System.out.println(liniaActual.toString());
+                System.out.println(liniaActual);
                 liniaActual = r.readLine();
             }
             //Control d'errors
         } catch (IOException e) {
-            System.out.println("ERROR (llegirDiccionari): " + e.toString());
+            System.out.println("ERROR (llegirDiccionari): " + e);
         }
     }
 
-    //BORRAR VERSIO FINAL
-    public void banana(View view) {
+    public void showActivity(View view) {
+        Intent intent = new Intent(this, solucions.class);
+        String message = "";
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+
+    }
+
+    public void generarConjuntLletres() {
         lletres = new UnsortedArraySet<>(7);
         generarArray();
         assignarLletres();
+    }
+
+    private boolean comprovarConjunt() {
+        generarConjuntLletres();
+        Iterator<String> iterador = diccionari.iterator();
+        String aux;
+        Character[] auxlletres = new Character[7];
+
+
+        Iterator it = lletres.iterator();
+
+
+        for (int m = 0; it.hasNext(); m++) {
+            auxlletres[m] = (Character) it.next();
+        }
+
+        while (iterador.hasNext()) {
+            aux = iterador.next();
+
+            for(int i = 0; i<auxlletres.length;){
+                if(aux.toUpperCase().contains(new StringBuilder().append(auxlletres[i]).toString())){
+                    i++;
+                    if(i==7){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
 
