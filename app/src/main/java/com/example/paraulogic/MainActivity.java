@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean comprovarConjunt() {
         generarConjuntLletres();
-        Iterator<String> iterador = diccionari.iterator();
+        /*Iterator<String> iterador = diccionari.iterator();
         String aux;
         Character[] auxlletres = new Character[7];
 
@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        return false;
+        return false;*/return true;
     }
 }
 
