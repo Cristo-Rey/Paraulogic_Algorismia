@@ -1,11 +1,14 @@
 package com.example.paraulogic;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     // El botó central ocupa la darrera posició
     int[] idButton = new int[7];
     // Mapping de les paraules que hem introduit
-    BSTMapping<String,Integer> paraules;
+    BSTMapping<String, Integer> paraules;
     TreeSet<String> diccionari;
 
     @Override
@@ -59,52 +62,63 @@ public class MainActivity extends AppCompatActivity {
 
         // Comprovam si compté la lletra del botó central
         // Cas en el que sí te la lletra central
-        if(paraula.getText().toString().length()>=3){
-        if (paraula.getText().toString().contains(btn.getText().toString())) {
-            // Comprovam si la lletra és del diccionari
-            // Cas en el que és al diccionari
-            if (diccionari.contains(paraula.getText().toString().toLowerCase())) {
-                Integer valor = paraules.get(paraula.getText().toString());
-                if (valor == null) {
-                    paraules.put(paraula.getText().toString(), 1);
-                } else {
-                    // augmentam en 1 la quantitat de vegades que l'hem introduit
-                    valor = valor + 1;
-                    paraules.put(paraula.getText().toString(),valor);
+        if (paraula.getText().toString().length() >= 3) {
+            if (paraula.getText().toString().contains(btn.getText().toString())) {
+                // Comprovam si la lletra és del diccionari
+                // Cas en el que és al diccionari
+                if (diccionari.contains(paraula.getText().toString().toLowerCase())) {
+                    Integer valor = paraules.get(paraula.getText().toString());
+                    if (valor == null) {
+                        paraules.put(paraula.getText().toString(), 1);
+                    } else {
+                        // augmentam en 1 la quantitat de vegades que l'hem introduit
+                        valor = valor + 1;
+                        paraules.put(paraula.getText().toString(), valor);
+                    }
+                    // Actialitzam la llista de paraules escrites
+                    Iterator it = paraules.iterator();
+                    String str = "";
+                    BSTMapping.Pair p;
+                    while (it.hasNext()) {
+                        p = (BSTMapping.Pair) it.next();
+                        str += p.key.toString() + "(" + p.value + "), ";
+                    }
+                    System.out.println(str);
+
+                }
+                // Cas en el que la paraula no és del diccionari
+                else {
+                    System.out.println("[introdueixParaula() -> No és una paraula vàlida]");
+
+                    // Ho mostram per la GUI
+                    Context context = getApplicationContext();
+                    CharSequence text = "No és una paraula vàlida";
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
             }
-            // Cas en el que la paraula no és del diccionari
-            else{
-                System.out.println("[introdueixParaula() -> No és una paraula vàlida]");
+            // Cas en el que no compté la lletra central
+            else {
+                System.out.println("[introdueixParaula() -> No compté la lletra central]");
 
                 // Ho mostram per la GUI
-                Context context =getApplicationContext();
-                CharSequence text ="No és una paraula vàlida";
+                Context context = getApplicationContext();
+                CharSequence text = "No compté la lletra central";
                 int duration = Toast.LENGTH_LONG;
-                Toast toast = Toast . makeText ( context , text , duration );
+                Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
             }
         }
-        // Cas en el que no compté la lletra central
-        else {
-            System.out.println("[introdueixParaula() -> No compté la lletra central]");
-
-            // Ho mostram per la GUI
-            Context context =getApplicationContext();
-            CharSequence text ="No compté la lletra central";
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast . makeText ( context , text , duration );
-            toast.show();
-        }}
         // Cas en el que la paraula no té 3 o més lletres
-        else{
+        else {
             System.out.println("[introdueixParaula() -> No compté 3 o més lletres]");
 
             // Ho mostram per la GUI
-            Context context =getApplicationContext();
-            CharSequence text ="No compté 3 o més lletres";
+            Context context = getApplicationContext();
+            CharSequence text = "No compté 3 o més lletres";
             int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast . makeText ( context , text , duration );
+            Toast toast = Toast.makeText(context, text, duration);
             toast.show();
         }
     }
@@ -194,13 +208,14 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(liniaActual.toString());
                 liniaActual = r.readLine();
             }
-        //Control d'errors
+            //Control d'errors
         } catch (IOException e) {
             System.out.println("ERROR (llegirDiccionari): " + e.toString());
         }
     }
+
     //BORRAR VERSIO FINAL
-    public void banana(View view){
+    public void banana(View view) {
         lletres = new UnsortedArraySet<>(7);
         generarArray();
         assignarLletres();
