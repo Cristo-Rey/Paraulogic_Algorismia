@@ -1,8 +1,6 @@
 package com.example.paraulogic;
 
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,13 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Random;
 import java.util.TreeSet;
 
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         paraules = new BSTMapping<>();
         llegirDiccionari();
 
-        while(!comprovarConjunt());
+        while (!comprovarConjunt()) ;
     }
 
     //Gestor de events botons principals
@@ -231,32 +230,59 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean comprovarConjunt() {
+        //Generam un conjunt de lletres
         generarConjuntLletres();
-        /*Iterator<String> iterador = diccionari.iterator();
-        String aux;
+
+        //VARIABLES
+        String paraula;
+        int contador = 0;
+        boolean trobat = true;
+        Iterator it = lletres.iterator();
+        Iterator<String> iterador = diccionari.iterator();
         Character[] auxlletres = new Character[7];
 
-
-        Iterator it = lletres.iterator();
-
-
+        //Guardam el conjunt generat a un array per facilitar el tractament
         for (int m = 0; it.hasNext(); m++) {
             auxlletres[m] = (Character) it.next();
         }
 
-        while (iterador.hasNext()) {
-            aux = iterador.next();
+        //DEBUG: Veure el conjunt de lletres
+        for (int i = 0; i < auxlletres.length; i++) {
+            System.out.print(auxlletres[i] + " ");
+        }
+        System.out.println();
 
-            for(int i = 0; i<auxlletres.length;){
-                if(aux.toUpperCase().contains(new StringBuilder().append(auxlletres[i]).toString())){
-                    i++;
-                    if(i==7){
+        //Bucle que recorr totes les paraules
+        while (iterador.hasNext()) {
+            paraula = iterador.next();
+            trobat = paraula.length()>=7; //Filtrat per millorar rendiment
+
+            contador = 0;
+
+            //Verificam que totes les lletres pertanyen al conjunt de lletres
+            for(int i = 0; i < paraula.length() && trobat; i++) {
+                for (int j = 0; j < auxlletres.length; j++) {
+                    if (paraula.toUpperCase().charAt(i) == auxlletres[j]) {
+                        trobat = true;
+                        break;
+                    }else{
+                        trobat = false;
+                    }
+                }
+            }
+
+            //Verificam que la paraula tengui totes les lletres
+            for (int i = 0; i < auxlletres.length && trobat; i++) {
+                if (paraula.toUpperCase().contains(new StringBuilder().append(auxlletres[i]))) {
+                    contador++;
+                    if (contador == 7) {
+                        System.out.println("TUTIFRUTI: " + paraula.toUpperCase()); //DEBUG
                         return true;
                     }
                 }
             }
         }
-        return false;*/return true;
+        return false;
     }
 }
 
