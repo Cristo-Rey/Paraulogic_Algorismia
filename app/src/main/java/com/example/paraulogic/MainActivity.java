@@ -217,8 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showActivity(View view) {
         Intent intent = new Intent(this, solucions.class);
-        String message = "";
-        intent.putExtra(EXTRA_MESSAGE, message);
+        intent.putExtra(EXTRA_MESSAGE, generarSolucions());
         startActivity(intent);
 
     }
@@ -255,17 +254,17 @@ public class MainActivity extends AppCompatActivity {
         //Bucle que recorr totes les paraules
         while (iterador.hasNext()) {
             paraula = iterador.next();
-            trobat = paraula.length()>=7; //Filtrat per millorar rendiment
+            trobat = paraula.length() >= 7; //Filtrat per millorar rendiment
 
             contador = 0;
 
             //Verificam que totes les lletres pertanyen al conjunt de lletres
-            for(int i = 0; i < paraula.length() && trobat; i++) {
+            for (int i = 0; i < paraula.length() && trobat; i++) {
                 for (int j = 0; j < auxlletres.length; j++) {
                     if (paraula.toUpperCase().charAt(i) == auxlletres[j]) {
                         trobat = true;
                         break;
-                    }else{
+                    } else {
                         trobat = false;
                     }
                 }
@@ -283,6 +282,62 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    private String generarSolucions() {
+        String solucions = "";
+
+        //VARIABLES
+        String paraula;
+        int contador = 0;
+        boolean trobat = true, tuti = false;
+        Iterator it = lletres.iterator();
+        Iterator<String> iterador = diccionari.iterator();
+        Character[] auxlletres = new Character[7];
+
+        //Guardam el conjunt generat a un array per facilitar el tractament
+        for (int m = 0; it.hasNext(); m++) {
+            auxlletres[m] = (Character) it.next();
+        }
+
+        //Bucle que recorr totes les paraules
+        while (iterador.hasNext()) {
+            paraula = iterador.next();
+            trobat = paraula.length() >= 3; //Filtrat per millorar rendiment
+            tuti = false;
+            contador = 0;
+
+            //Verificam que totes les lletres pertanyen al conjunt de lletres
+            for (int i = 0; i < paraula.length() && trobat; i++) {
+                for (int j = 0; j < auxlletres.length; j++) {
+                    if (paraula.toUpperCase().charAt(i) == auxlletres[j]) {
+                        trobat = true;
+                        break;
+                    } else {
+                        trobat = false;
+                    }
+                }
+            }
+
+            //Verificam que la paraula tengui totes les lletres
+            for (int i = 0; i < auxlletres.length && trobat; i++) {
+                if (paraula.toUpperCase().contains(new StringBuilder().append(auxlletres[i]))) {
+                    contador++;
+                    if (contador == 7) {
+                        tuti = true;
+                    }
+
+                }else if (i == auxlletres.length - 1) trobat =  false;
+            }
+            if (trobat) {
+                if (tuti) {
+                    solucions += "<font color = 'red'>" + paraula.toUpperCase() + "</font>, ";
+                } else {
+                    solucions += paraula.toUpperCase() + ", ";
+                }
+            }
+        }
+        return solucions;
     }
 }
 

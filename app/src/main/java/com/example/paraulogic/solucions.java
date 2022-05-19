@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.widget.TextView;
 
 public class solucions extends AppCompatActivity {
@@ -17,6 +18,6 @@ public class solucions extends AppCompatActivity {
         String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
         TextView text = (TextView) findViewById(R.id.textView);
-        text.setText(message);
+        text.setText(Html.fromHtml(message));
     }
 }
