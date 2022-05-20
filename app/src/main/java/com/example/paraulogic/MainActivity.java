@@ -1,6 +1,7 @@
 package com.example.paraulogic;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         text.setText(s);
     }
 
+    @SuppressLint("SetTextI18n")
     public void introdueixParaula(View view) {
         // Agafam el botó central
         Button btn = findViewById(idButton[idButton.length - 1]);
@@ -76,16 +78,21 @@ public class MainActivity extends AppCompatActivity {
                         valor = valor + 1;
                         paraules.put(paraula.getText().toString(), valor);
                     }
+                    
                     // Actialitzam la llista de paraules escrites
                     Iterator it = paraules.iterator();
                     String str = "";
                     BSTMapping.Pair p;
+                    int contador = 0;
+                    TextView respostes = findViewById(R.id.respostes);
+                    
                     while (it.hasNext()) {
+                        contador++;
                         p = (BSTMapping.Pair) it.next();
                         str += p.key.toString() + "(" + p.value + "), ";
                     }
                     System.out.println(str);
-
+                    respostes.setText("Has trobat " + contador + " paraules: " + str);
                 }
                 // Cas en el que la paraula no és del diccionari
                 else {
@@ -122,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
         }
+
+        //Borram el que s'havia introduit
+        paraula.setText("");
     }
 
 
@@ -206,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
             while (liniaActual != null) {
                 //Afegim la paraula llegida a l'arbre
                 diccionari.add(liniaActual);
-                System.out.println(liniaActual);
+                //System.out.println(liniaActual);
                 liniaActual = r.readLine();
             }
             //Control d'errors
