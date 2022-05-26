@@ -39,13 +39,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Cream arbre on guarderem les paraules escrites
         paraules = new BSTMapping<>();
+
+        // Carregam el diccionari
         llegirDiccionari();
 
+        // Cercam un conjunt de 7 lletres fins que es pugui fer un tuti
         while (!comprovarConjunt());
     }
 
-    //Gestor de events botons principals
+    //Gestor de events botons principals (botons de lletres)
     public void setLletra(View view) {
         //Cream els objectes del botó pitjat i de la casella d'escriure
         Button btn = findViewById(view.getId());
@@ -134,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         paraula.setText("");
     }
 
+    // Botó suprimir (suprimeix una lletra)
     public void suprimeix(View view) {
         TextView text = findViewById(R.id.escritura);
 
@@ -142,17 +147,20 @@ public class MainActivity extends AppCompatActivity {
         if (s.length() > 0) text.setText(s.substring(0, s.length() - 1));
     }
 
+    // Botó shuffle
     public void shuffle(View view) {
         Character[] auxlletres = new Character[7];
         Iterator it = lletres.iterator();
         Random r = new Random();
         int m = 0;
 
+        // Obtenim totes les lletres del nostre conjunt
         while (it.hasNext()) {
             auxlletres[m] = (Character) it.next();
             m++;
         }
 
+        // Les remesclam totes excepte la central
         for (int i = 7 - 2; i > 0; i--) {
             int j = r.nextInt(i + 1);
             Character temp = auxlletres[i];
@@ -168,7 +176,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Generam l'array de lletres
     public void generarArray() {
-
         Random ran = new Random();
         char lletra;
         for (int i = 0; i < 7; ) {
@@ -223,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Per el botó de solucions
     public void showActivity(View view) {
         Intent intent = new Intent(this, solucions.class);
         intent.putExtra(EXTRA_MESSAGE, generarSolucions());
@@ -230,12 +238,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Generar un conjunt de lletres
     public void generarConjuntLletres() {
         lletres = new UnsortedArraySet<>(7);
         generarArray();
         assignarLletres();
     }
 
+    // Comprovam que el conjunt de lletres pugui formar un tuti
     private boolean comprovarConjunt() {
         //Generam un conjunt de lletres
         generarConjuntLletres();
@@ -281,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    // Per mostrar les solucions
     private String generarSolucions() {
         String solucions = "";
 
@@ -305,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
                 trobat = paraulaPertanyConjunt(paraula, auxlletres);
             }
 
+            // Si és un tuti el posam en vermell
             if (trobat) {
                 if (paraulaTUTI(paraula, auxlletres)) {
                     solucions += "<font color = 'red'>" + paraula.toUpperCase() + "</font>, ";
@@ -316,6 +328,7 @@ public class MainActivity extends AppCompatActivity {
         return solucions;
     }
 
+    // Verificam que una paraula es pugui formar amb i només amb les lletres del nostre conjunt
     private boolean paraulaPertanyConjunt(String paraula, Character[] auxlletres) {
         boolean resultat = true;
         for (int i = 0; i < paraula.length() && resultat; i++) {
@@ -346,6 +359,7 @@ public class MainActivity extends AppCompatActivity {
         return resultat;
     }
 
+    // Comprovam que la paraula sigui o no sigui un tuti
     private boolean paraulaTUTI(String paraula, Character[] auxlletres) {
         int contador = 0;
 
