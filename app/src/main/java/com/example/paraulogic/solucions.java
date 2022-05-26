@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.text.Html;
 import android.widget.TextView;
 
+/*
+ * @author Joan López Ferrer & Xavier Vives Marcus
+ */
+
 public class solucions extends AppCompatActivity {
 
     @Override
