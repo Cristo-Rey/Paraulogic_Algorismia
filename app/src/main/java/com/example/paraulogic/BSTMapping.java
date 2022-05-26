@@ -17,8 +17,10 @@ public class BSTMapping<K extends Comparable, V> {
     }
 
 
+    // Per posar un element a l'arbre
     public V put(K key, V value) {
         Cerca c = new Cerca(null);
+        // cridam a la funció recursiva
         this.root = putRecursive(key, value, root, c);
         return c.value;
     }
@@ -45,7 +47,9 @@ public class BSTMapping<K extends Comparable, V> {
         }
     }
 
+    // Per obtenir un element amb clau 'key'
     public V get(K key) {
+        // Crirada a la funció recursiva
         Node n = getRecursive(key, root);
         if (n == null) {
             return null;
@@ -72,8 +76,10 @@ public class BSTMapping<K extends Comparable, V> {
         }
     }
 
+    // Per eliminar l'element amb clau 'key'
     public V remove(K key) {
         Cerca cerca = new Cerca(null);
+        // Cridada a funció recursiva
         this.root = removeRecursive(key, root, cerca);
         return root.value;
     }
@@ -118,6 +124,8 @@ public class BSTMapping<K extends Comparable, V> {
         return current;
     }
 
+
+    // Per recórerr l'arbre
     public Iterator iterator() {
         Iterator it = new IteratorBSTMapping();
         return it;
