@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         paraules = new BSTMapping<>();
         llegirDiccionari();
 
-        while (!comprovarConjunt()) ;
+        while (!comprovarConjunt());
     }
 
     //Gestor de events botons principals
@@ -78,14 +78,14 @@ public class MainActivity extends AppCompatActivity {
                         valor = valor + 1;
                         paraules.put(paraula.getText().toString(), valor);
                     }
-                    
+
                     // Actialitzam la llista de paraules escrites
                     Iterator it = paraules.iterator();
                     String str = "";
                     BSTMapping.Pair p;
                     int contador = 0;
                     TextView respostes = findViewById(R.id.respostes);
-                    
+
                     while (it.hasNext()) {
                         contador++;
                         p = (BSTMapping.Pair) it.next();
@@ -134,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
         paraula.setText("");
     }
 
-
     public void suprimeix(View view) {
         TextView text = findViewById(R.id.escritura);
 
@@ -177,7 +176,6 @@ public class MainActivity extends AppCompatActivity {
             if (lletres.add(lletra)) i++;
         }
     }
-
 
     //Metode que asigna les lletres als botons
     public void assignarLletres() {
@@ -244,8 +242,8 @@ public class MainActivity extends AppCompatActivity {
 
         //VARIABLES
         String paraula;
-        int contador = 0;
         boolean trobat = true;
+        boolean vocal;
         Iterator it = lletres.iterator();
         Iterator<String> iterador = diccionari.iterator();
         Character[] auxlletres = new Character[7];
@@ -255,6 +253,9 @@ public class MainActivity extends AppCompatActivity {
             auxlletres[m] = (Character) it.next();
         }
 
+        //Revisam que hi hagui almenys una vocal
+        vocal = comprovarVocal(auxlletres);
+
         //DEBUG: Veure el conjunt de lletres
         for (int i = 0; i < auxlletres.length; i++) {
             System.out.print(auxlletres[i] + " ");
@@ -262,32 +263,18 @@ public class MainActivity extends AppCompatActivity {
         System.out.println();
 
         //Bucle que recorr totes les paraules
-        while (iterador.hasNext()) {
+        while (iterador.hasNext() && vocal) {
             paraula = iterador.next();
-            trobat = paraula.length() >= 7; //Filtrat per millorar rendiment
-
-            contador = 0;
 
             //Verificam que totes les lletres pertanyen al conjunt de lletres
-            for (int i = 0; i < paraula.length() && trobat; i++) {
-                for (int j = 0; j < auxlletres.length; j++) {
-                    if (paraula.toUpperCase().charAt(i) == auxlletres[j]) {
-                        trobat = true;
-                        break;
-                    } else {
-                        trobat = false;
-                    }
-                }
+            if (paraula.length() >= 7) {
+                trobat = paraulaPertanyConjunt(paraula, auxlletres);
             }
 
-            //Verificam que la paraula tengui totes les lletres
-            for (int i = 0; i < auxlletres.length && trobat; i++) {
-                if (paraula.toUpperCase().contains(new StringBuilder().append(auxlletres[i]))) {
-                    contador++;
-                    if (contador == 7) {
-                        System.out.println("TUTIFRUTI: " + paraula.toUpperCase()); //DEBUG
-                        return true;
-                    }
+            //Verificam que la paraula sigui un TUTI
+            if (trobat) {
+                if (paraulaTUTI(paraula, auxlletres)) {
+                    return true;
                 }
             }
         }
@@ -300,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
         //VARIABLES
         String paraula;
         int contador = 0;
-        boolean trobat = true, tuti = false;
+        boolean trobat = true;
         Iterator it = lletres.iterator();
         Iterator<String> iterador = diccionari.iterator();
         Character[] auxlletres = new Character[7];
@@ -313,34 +300,14 @@ public class MainActivity extends AppCompatActivity {
         //Bucle que recorr totes les paraules
         while (iterador.hasNext()) {
             paraula = iterador.next();
-            trobat = paraula.length() >= 3; //Filtrat per millorar rendiment
-            tuti = false;
-            contador = 0;
 
             //Verificam que totes les lletres pertanyen al conjunt de lletres
-            for (int i = 0; i < paraula.length() && trobat; i++) {
-                for (int j = 0; j < auxlletres.length; j++) {
-                    if (paraula.toUpperCase().charAt(i) == auxlletres[j]) {
-                        trobat = true;
-                        break;
-                    } else {
-                        trobat = false;
-                    }
-                }
+            if (paraula.length() >= 3) {
+                trobat = paraulaPertanyConjunt(paraula, auxlletres);
             }
 
-            //Verificam que la paraula tengui totes les lletres
-            for (int i = 0; i < auxlletres.length && trobat; i++) {
-                if (paraula.toUpperCase().contains(new StringBuilder().append(auxlletres[i]))) {
-                    contador++;
-                    if (contador == 7) {
-                        tuti = true;
-                    }
-
-                }else if (i == auxlletres.length - 1) trobat =  false;
-            }
             if (trobat) {
-                if (tuti) {
+                if (paraulaTUTI(paraula, auxlletres)) {
                     solucions += "<font color = 'red'>" + paraula.toUpperCase() + "</font>, ";
                 } else {
                     solucions += paraula.toUpperCase() + ", ";
@@ -348,6 +315,50 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return solucions;
+    }
+
+    private boolean paraulaPertanyConjunt(String paraula, Character[] auxlletres) {
+        boolean resultat = true;
+        for (int i = 0; i < paraula.length() && resultat; i++) {
+            for (int j = 0; j < auxlletres.length; j++) {
+                if (paraula.toUpperCase().charAt(i) == auxlletres[j]) {
+                    resultat = true;
+                    break;
+                } else {
+                    resultat = false;
+                }
+            }
+        }
+        return resultat;
+    }
+
+    //Verificam que en el conjunt existeixi una vocal
+    private boolean comprovarVocal(Character[] conjuntLletres) {
+        boolean resultat = false;
+        Character[] vocals = {'A', 'E', 'I', 'O', 'U'};
+        for (int i = 0; i < conjuntLletres.length && !resultat; i++) {
+            for (int j = 0; j < vocals.length; j++) {
+                if (conjuntLletres[i] == vocals[j]) {
+                    resultat = true;
+                    break;
+                }
+            }
+        }
+        return resultat;
+    }
+
+    private boolean paraulaTUTI(String paraula, Character[] auxlletres) {
+        int contador = 0;
+
+        for (int i = 0; i < auxlletres.length; i++) {
+            if (paraula.toUpperCase().contains(new StringBuilder().append(auxlletres[i]))) {
+                contador++;
+                if (contador == 7) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
 
