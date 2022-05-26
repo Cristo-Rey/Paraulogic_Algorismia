@@ -286,8 +286,7 @@ public class MainActivity extends AppCompatActivity {
 
         //VARIABLES
         String paraula;
-        int contador = 0;
-        boolean trobat = true;
+        boolean trobat = false;
         Iterator it = lletres.iterator();
         Iterator<String> iterador = diccionari.iterator();
         Character[] auxlletres = new Character[7];
