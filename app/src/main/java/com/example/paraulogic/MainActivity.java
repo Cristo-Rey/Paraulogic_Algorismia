@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         text.setText(s);
     }
 
-    @SuppressLint("SetTextI18n")
     public void introdueixParaula(View view) {
         // Agafam el botó central
         Button btn = findViewById(idButton[idButton.length - 1]);
